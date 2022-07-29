@@ -21,7 +21,7 @@
         {
             "name": "QUICKSTART_REPOSITORY_URL",
             "description": "The URL of the quickstart Git repository.",
-            "value": "https://github.com/openshift-evangelists/wordpress-quickstart",
+            "value": "https://github.com/PinOliver/wordpress-quickstart",
             "required": true
         },
         {
@@ -33,7 +33,7 @@
         {
             "name": "WORDPRESS_VOLUME_TYPE",
             "description": "Type of the persistent volume for Wordpress.",
-            "value": "ReadWriteOnce",
+            "value": "ReadWriteMany",
             "required": true
         },
         {
@@ -75,13 +75,13 @@
         {
             "name": "MYSQL_VERSION",
             "description": "The version of the MySQL database.",
-            "value": "5.7",
+            "value": "8.0",
             "required": true
         },
         {
             "name": "PHP_VERSION",
             "description": "The version of the PHP builder.",
-            "value": "7.0",
+            "value": "7.5",
             "required": true
         }
     ],
@@ -227,40 +227,6 @@
                                         "memory": "${WORDPRESS_MEMORY_LIMIT}"
 				    }
                                 },
-				"readinessProbe": {
-				    "failureThreshold": 3,
-				    "httpGet": {
-					"path": "/wp-admin/install.php",
-					"port": 8080,
-					"scheme": "HTTP",
-					"httpHeaders": [
-					    {
-						"name": "X-Forwarded-Proto",
-						"value": "https"
-					    }
-					]
-				    },
-				    "periodSeconds": 10,
-				    "successThreshold": 1,
-				    "timeoutSeconds": 1
-				},
-				"livenessProbe": {
-				    "failureThreshold": 3,
-				    "httpGet": {
-					"path": "/wp-admin/install.php",
-					"port": 8080,
-					"scheme": "HTTP",
-					"httpHeaders": [
-					    {
-						"name": "X-Forwarded-Proto",
-						"value": "https"
-					    }
-					]
-				    },
-				    "periodSeconds": 10,
-				    "successThreshold": 1,
-				    "timeoutSeconds": 1
-				},
                                 "env": [
                                     {
                                         "name": "MYSQL_DATABASE",
@@ -363,21 +329,6 @@
                                         "memory": "${DATABASE_MEMORY_LIMIT}"
 				    }
                                 },
-				"readinessProbe": {
-				  "timeoutSeconds": 1,
-				  "initialDelaySeconds": 5,
-				  "exec": {
-				    "command": [ "/bin/sh", "-i", "-c",
-				      "MYSQL_PWD=\"$MYSQL_PASSWORD\" mysql -h 127.0.0.1 -u $MYSQL_USER -D $MYSQL_DATABASE -e 'SELECT 1'"]
-				  }
-				},
-				"livenessProbe": {
-				  "timeoutSeconds": 1,
-				  "initialDelaySeconds": 30,
-				  "tcpSocket": {
-				    "port": 3306
-				  }
-				},
                                 "env": [
                                     {
                                         "name": "MYSQL_DATABASE",
@@ -488,7 +439,7 @@
             },
             "spec": {
                 "accessModes": [
-                    "ReadWriteOnce"
+                    "ReadWriteMany"
                 ],
                 "resources": {
                     "requests": {
